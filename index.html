@@ -186,6 +186,20 @@
     .form-error { color: var(--red); font-size: 13px; margin-bottom: 12px; padding: 8px 11px; background: var(--red-bg); border-radius: 8px; }
     .submit-btn { width: 100%; background: linear-gradient(135deg, var(--purple-dark), var(--purple)); border: none; border-radius: 12px; padding: 14px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font); margin-top: 4px; }
 
+    /* ── Edit modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+      align-items: flex-end; justify-content: center;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal {
+      background: var(--surface); border-radius: 20px 20px 0 0;
+      border: 1px solid var(--border2); padding: 20px 18px 32px;
+      width: 100%; max-width: 520px; animation: slideUp .25s ease;
+    }
+    .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 18px; }
+
     /* ── Install banner ── */
     #install-banner {
       display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
@@ -290,6 +304,28 @@
       </div>
     </div>
   </main>
+</div>
+
+<!-- Edit modal -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-title">Editar movimiento</div>
+    <div class="type-toggle">
+      <button class="type-btn expense-active" id="edit-btn-expense" onclick="setEditType('expense')">Gasto</button>
+      <button class="type-btn" id="edit-btn-income" onclick="setEditType('income')">Ingreso</button>
+    </div>
+    <label class="form-label">Monto ($)</label>
+    <input class="form-input" id="edit-amount" type="number" min="0" placeholder="0" inputmode="decimal" />
+    <label class="form-label">Categoría</label>
+    <div class="cat-grid" id="edit-cats"></div>
+    <label class="form-label">Nota (opcional)</label>
+    <input class="form-input" id="edit-note" type="text" placeholder="Descripción..." />
+    <label class="form-label">Fecha</label>
+    <input class="form-input" id="edit-date" type="date" />
+    <div class="form-error" id="edit-error" style="display:none"></div>
+    <button class="submit-btn" onclick="saveEdit()">Guardar cambios</button>
+    <button onclick="closeEdit()" style="width:100%;margin-top:8px;background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:12px;padding:12px;font-size:14px;cursor:pointer;font-family:var(--font)">Cancelar</button>
+  </div>
 </div>
 
 <!-- Install banner -->
@@ -457,6 +493,7 @@ function txHTML(t) {
       <div class="tx-right">
         <div class="tx-amount ${t.type}">${t.type==='income'?'+':'-'}${fmt(t.amount)}</div>
         <div class="del-confirm-row">
+          <button class="del-btn edit-btn" title="Editar">✏</button>
           <button class="del-btn del-ask">✕</button>
         </div>
       </div>
@@ -464,6 +501,12 @@ function txHTML(t) {
 }
 
 function attachDeleteHandlers(container) {
+  container.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.onclick = function() {
+      const id = this.closest('.tx-row').dataset.id;
+      openEdit(id);
+    };
+  });
   container.querySelectorAll('.del-ask').forEach(btn => {
     btn.onclick = function() {
       const row = this.closest('.del-confirm-row');
@@ -631,6 +674,75 @@ function submitForm() {
 
   setView('dashboard');
 }
+
+// ── Edit modal ────────────────────────────────────────────
+let editId = null;
+let editType = 'expense';
+let editCategory = '';
+
+function openEdit(id) {
+  const t = transactions.find(tx => tx.id === id);
+  if (!t) return;
+  editId = id;
+  editType = t.type;
+  editCategory = t.category;
+  document.getElementById('edit-amount').value = t.amount;
+  document.getElementById('edit-note').value = t.note || '';
+  document.getElementById('edit-date').value = t.date;
+  document.getElementById('edit-error').style.display = 'none';
+  document.getElementById('edit-btn-expense').className = 'type-btn' + (editType==='expense'?' expense-active':'');
+  document.getElementById('edit-btn-income').className = 'type-btn' + (editType==='income'?' income-active':'');
+  renderEditCatGrid();
+  document.getElementById('edit-modal').classList.add('visible');
+}
+
+function closeEdit() {
+  document.getElementById('edit-modal').classList.remove('visible');
+  editId = null;
+}
+
+function setEditType(type) {
+  editType = type;
+  editCategory = '';
+  document.getElementById('edit-btn-expense').className = 'type-btn' + (type==='expense'?' expense-active':'');
+  document.getElementById('edit-btn-income').className = 'type-btn' + (type==='income'?' income-active':'');
+  renderEditCatGrid();
+}
+
+function renderEditCatGrid() {
+  const grid = document.getElementById('edit-cats');
+  grid.innerHTML = CATS[editType].map(c => `
+    <button class="cat-chip${editCategory===c.id?' active':''}" onclick="selectEditCat('${c.id}')">
+      <span class="cat-chip-icon">${c.icon}</span>
+      <span>${c.label}</span>
+    </button>`).join('');
+}
+
+function selectEditCat(id) {
+  editCategory = id;
+  renderEditCatGrid();
+}
+
+function saveEdit() {
+  const amount = parseFloat(document.getElementById('edit-amount').value);
+  const note = document.getElementById('edit-note').value.trim();
+  const date = document.getElementById('edit-date').value;
+  const errEl = document.getElementById('edit-error');
+
+  if (!amount || amount <= 0) { errEl.textContent = 'Ingresá un monto válido.'; errEl.style.display='block'; return; }
+  if (!editCategory) { errEl.textContent = 'Seleccioná una categoría.'; errEl.style.display='block'; return; }
+  errEl.style.display = 'none';
+
+  transactions = transactions.map(t => t.id === editId ? { ...t, type: editType, amount, category: editCategory, note, date } : t);
+  save(transactions);
+  closeEdit();
+  renderCurrentView();
+}
+
+// close modal on overlay click
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeEdit();
+});
 
 // ── Export ────────────────────────────────────────────────
 function exportExcel() {
