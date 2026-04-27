@@ -228,6 +228,7 @@
       <button class="nav-btn active" data-view="dashboard" onclick="setView('dashboard')">Inicio</button>
       <button class="nav-btn" data-view="add" onclick="setView('add')">+ Agregar</button>
       <button class="nav-btn" data-view="history" onclick="setView('history')">Historial</button>
+      <button class="nav-btn" data-view="settings" onclick="setView('settings')">⚙</button>
     </nav>
   </header>
 
@@ -303,6 +304,23 @@
         <div id="history-list"></div>
       </div>
     </div>
+
+    <!-- SETTINGS -->
+    <div id="view-settings" class="view hidden">
+      <div class="form-card" style="margin-bottom:14px">
+        <div class="form-title">💾 Backup de datos</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">Exportá tus datos como archivo de respaldo. Guardalo en Google Drive, WhatsApp o donde quieras para no perderlos.</p>
+        <button class="submit-btn" onclick="exportBackup()">⬇ Descargar backup</button>
+      </div>
+      <div class="form-card">
+        <div class="form-title">📂 Restaurar datos</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">Si perdiste tus datos, importá el archivo de backup para recuperarlos.</p>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importBackup(event)" />
+        <button class="submit-btn" style="background:linear-gradient(135deg,#1a3a2a,#2a5a3a)" onclick="document.getElementById('import-file').click()">📂 Importar backup local</button>
+        <button class="submit-btn" style="background:linear-gradient(135deg,#1a2a3a,#2a3a5a);margin-top:8px" onclick="restoreFromGitHub()">☁️ Restaurar desde GitHub</button>
+        <div id="import-status" style="display:none;font-size:13px;padding:10px 12px;border-radius:8px;margin-top:12px"></div>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -365,6 +383,34 @@ let chartMode = 'bars';
 let formType = 'expense';
 let formCategory = '';
 
+// ── GitHub Sync config ────────────────────────────────────
+const GH_TOKEN = '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';
+const GH_REPO = 'mfantini87-sketch/finanzas';
+const GH_FILE = 'datos.json';
+
+async function syncToGitHub(txs) {
+  try {
+    const headers = {
+      'Authorization': `token ${GH_TOKEN}`,
+      'Content-Type': 'application/json',
+    };
+    // Get current file SHA (needed to update)
+    let sha = null;
+    const check = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`, { headers });
+    if (check.ok) {
+      const data = await check.json();
+      sha = data.sha;
+    }
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify({ version: 1, date: new Date().toISOString(), transactions: txs }, null, 2))));
+    const body = { message: 'backup automático', content, ...(sha ? { sha } : {}) };
+    await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`, {
+      method: 'PUT', headers, body: JSON.stringify(body)
+    });
+  } catch(e) {
+    console.warn('GitHub sync error:', e);
+  }
+}
+
 // ── Storage ───────────────────────────────────────────────
 function load() {
   try { return JSON.parse(localStorage.getItem('finanzas-txs') || '[]'); } catch { return []; }
@@ -373,7 +419,9 @@ function save(txs) {
   const badge = document.getElementById('saving-badge');
   badge.style.display = 'inline';
   localStorage.setItem('finanzas-txs', JSON.stringify(txs));
-  setTimeout(() => badge.style.display = 'none', 800);
+  syncToGitHub(txs).finally(() => {
+    setTimeout(() => badge.style.display = 'none', 800);
+  });
 }
 
 // ── Formatting ────────────────────────────────────────────
@@ -802,9 +850,10 @@ function exportExcel() {
 // ── View routing ──────────────────────────────────────────
 function setView(v) {
   currentView = v;
-  ['dashboard','add','history'].forEach(name => {
+  ['dashboard','add','history','settings'].forEach(name => {
     document.getElementById(`view-${name}`).classList.toggle('hidden', name !== v);
-    document.querySelector(`[data-view="${name}"]`).classList.toggle('active', name === v);
+    const btn = document.querySelector(`[data-view="${name}"]`);
+    if (btn) btn.classList.toggle('active', name === v);
   });
   renderCurrentView();
 }
@@ -812,6 +861,72 @@ function setView(v) {
 function renderCurrentView() {
   if (currentView === 'dashboard') renderDashboard();
   else if (currentView === 'history') renderHistory();
+}
+
+async function restoreFromGitHub() {
+  const statusEl = document.getElementById('import-status');
+  statusEl.style.display = 'block';
+  statusEl.style.background = '#1a1a2e';
+  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = '⏳ Conectando con GitHub...';
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`, {
+      headers: { 'Authorization': `token ${GH_TOKEN}` }
+    });
+    if (!res.ok) throw new Error('No se encontró backup en GitHub');
+    const data = await res.json();
+    const decoded = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    if (!decoded.transactions || !Array.isArray(decoded.transactions)) throw new Error('Formato inválido');
+    transactions = decoded.transactions;
+    localStorage.setItem('finanzas-txs', JSON.stringify(transactions));
+    statusEl.style.background = 'var(--green-bg)';
+    statusEl.style.color = 'var(--green)';
+    statusEl.textContent = `✓ ${transactions.length} movimientos restaurados desde GitHub.`;
+    renderCurrentView();
+  } catch(e) {
+    statusEl.style.background = 'var(--red-bg)';
+    statusEl.style.color = 'var(--red)';
+    statusEl.textContent = `✕ ${e.message}`;
+  }
+}
+
+// ── Backup & Restore ──────────────────────────────────────
+function exportBackup() {
+  if (!transactions.length) return;
+  const data = JSON.stringify({ version: 1, date: new Date().toISOString(), transactions }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `finanzas-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  const statusEl = document.getElementById('import-status');
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.transactions || !Array.isArray(data.transactions)) throw new Error('Formato inválido');
+      transactions = data.transactions;
+      save(transactions);
+      statusEl.style.display = 'block';
+      statusEl.style.background = 'var(--green-bg)';
+      statusEl.style.color = 'var(--green)';
+      statusEl.textContent = `✓ ${transactions.length} movimientos restaurados correctamente.`;
+    } catch {
+      statusEl.style.display = 'block';
+      statusEl.style.background = 'var(--red-bg)';
+      statusEl.style.color = 'var(--red)';
+      statusEl.textContent = '✕ El archivo no es un backup válido.';
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
 }
 
 // ── PWA install ───────────────────────────────────────────
