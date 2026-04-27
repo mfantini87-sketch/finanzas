@@ -308,6 +308,14 @@
     <!-- SETTINGS -->
     <div id="view-settings" class="view hidden">
       <div class="form-card" style="margin-bottom:14px">
+        <div class="form-title">🔑 Token de GitHub</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">Ingresá tu token para activar el backup automático en GitHub. Se guarda solo en tu dispositivo.</p>
+        <label class="form-label">Personal Access Token</label>
+        <input class="form-input" id="gh-token-input" type="password" placeholder="ghp_..." />
+        <button class="submit-btn" onclick="saveToken()">Guardar token</button>
+        <div id="token-status" style="display:none;font-size:13px;padding:10px 12px;border-radius:8px;margin-top:8px"></div>
+      </div>
+      <div class="form-card" style="margin-bottom:14px">
         <div class="form-title">💾 Backup de datos</div>
         <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">Exportá tus datos como archivo de respaldo. Guardalo en Google Drive, WhatsApp o donde quieras para no perderlos.</p>
         <button class="submit-btn" onclick="exportBackup()">⬇ Descargar backup</button>
@@ -384,17 +392,21 @@ let formType = 'expense';
 let formCategory = '';
 
 // ── GitHub Sync config ────────────────────────────────────
-const GH_TOKEN = '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';
 const GH_REPO = 'mfantini87-sketch/finanzas';
 const GH_FILE = 'datos.json';
 
+function getToken() {
+  return localStorage.getItem('gh-token') || '';
+}
+
 async function syncToGitHub(txs) {
+  const token = getToken();
+  if (!token) return;
   try {
     const headers = {
-      'Authorization': `token ${GH_TOKEN}`,
+      'Authorization': `token ${token}`,
       'Content-Type': 'application/json',
     };
-    // Get current file SHA (needed to update)
     let sha = null;
     const check = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`, { headers });
     if (check.ok) {
@@ -861,17 +873,50 @@ function setView(v) {
 function renderCurrentView() {
   if (currentView === 'dashboard') renderDashboard();
   else if (currentView === 'history') renderHistory();
+  else if (currentView === 'settings') {
+    const saved = getToken();
+    const input = document.getElementById('gh-token-input');
+    if (saved) input.placeholder = '✓ Token guardado (ingresá uno nuevo para reemplazarlo)';
+    else input.placeholder = 'ghp_...';
+  }
+}
+
+function saveToken() {
+  const token = document.getElementById('gh-token-input').value.trim();
+  const statusEl = document.getElementById('token-status');
+  if (!token || !token.startsWith('ghp_')) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = 'var(--red-bg)';
+    statusEl.style.color = 'var(--red)';
+    statusEl.textContent = '✕ Token inválido. Debe empezar con ghp_';
+    return;
+  }
+  localStorage.setItem('gh-token', token);
+  statusEl.style.display = 'block';
+  statusEl.style.background = 'var(--green-bg)';
+  statusEl.style.color = 'var(--green)';
+  statusEl.textContent = '✓ Token guardado. El backup automático está activo.';
+  document.getElementById('gh-token-input').value = '';
+  // Trigger a sync immediately
+  syncToGitHub(transactions);
 }
 
 async function restoreFromGitHub() {
+  const token = getToken();
   const statusEl = document.getElementById('import-status');
   statusEl.style.display = 'block';
+  if (!token) {
+    statusEl.style.background = 'var(--red-bg)';
+    statusEl.style.color = 'var(--red)';
+    statusEl.textContent = '✕ Primero ingresá tu token de GitHub arriba.';
+    return;
+  }
   statusEl.style.background = '#1a1a2e';
   statusEl.style.color = 'var(--muted)';
   statusEl.textContent = '⏳ Conectando con GitHub...';
   try {
     const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`, {
-      headers: { 'Authorization': `token ${GH_TOKEN}` }
+      headers: { 'Authorization': `token ${token}` }
     });
     if (!res.ok) throw new Error('No se encontró backup en GitHub');
     const data = await res.json();
