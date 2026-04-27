@@ -1,14 +1,5 @@
 {
   "version": 1,
-  "date": "2026-04-27T20:40:24.658Z",
-  "transactions": [
-    {
-      "id": "1777322424246",
-      "type": "expense",
-      "amount": 26000,
-      "category": "transporte",
-      "note": "",
-      "date": "2026-04-27"
-    }
-  ]
+  "date": "2026-04-27T20:48:21.145Z",
+  "transactions": []
 }
