@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-04-29T00:52:28.101Z",
+  "date": "2026-04-29T00:52:47.689Z",
   "transactions": [
+    {
+      "id": "1777423967403",
+      "type": "expense",
+      "amount": 20000,
+      "category": "comida",
+      "note": "Cena fideos chinos",
+      "date": "2026-04-28"
+    },
     {
       "id": "1777423947793",
       "type": "expense",
