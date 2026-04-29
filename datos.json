@@ -1,5 +1,14 @@
 {
   "version": 1,
-  "date": "2026-04-27T20:48:38.965Z",
-  "transactions": []
+  "date": "2026-04-29T00:50:57.277Z",
+  "transactions": [
+    {
+      "id": "1777423856434",
+      "type": "expense",
+      "amount": 8200,
+      "category": "comida",
+      "note": "Fiambrería",
+      "date": "2026-04-22"
+    }
+  ]
 }
