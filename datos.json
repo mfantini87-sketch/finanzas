@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-04-29T00:50:57.277Z",
+  "date": "2026-04-29T00:51:28.921Z",
   "transactions": [
+    {
+      "id": "1777423888476",
+      "type": "expense",
+      "amount": 26000,
+      "category": "transporte",
+      "note": "Viajes a curitiba 13c/u",
+      "date": "2026-04-23"
+    },
     {
       "id": "1777423856434",
       "type": "expense",
