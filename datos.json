@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-04-29T01:27:54.066Z",
+  "date": "2026-05-01T14:29:40.489Z",
   "transactions": [
+    {
+      "id": "1777645779448",
+      "type": "expense",
+      "amount": 40000,
+      "category": "salud",
+      "note": "Veterinaria Negri",
+      "date": "2026-04-30"
+    },
     {
       "id": "1777423967403",
       "type": "expense",
