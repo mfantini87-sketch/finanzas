@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-04T16:56:32.528Z",
+  "date": "2026-06-04T16:56:53.826Z",
   "transactions": [
+    {
+      "id": "1780592213438",
+      "type": "expense",
+      "amount": 30000,
+      "category": "comida",
+      "note": "Almuerzo pedido corre",
+      "date": "2026-06-04"
+    },
     {
       "id": "1780592192150",
       "type": "expense",
