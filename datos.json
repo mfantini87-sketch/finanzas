@@ -1,5 +1,14 @@
 {
   "version": 1,
-  "date": "2026-06-04T16:53:05.034Z",
-  "transactions": []
+  "date": "2026-06-04T16:55:44.434Z",
+  "transactions": [
+    {
+      "id": "1780592143809",
+      "type": "income",
+      "amount": 1154000,
+      "category": "otro_ingreso",
+      "note": "Saldo inicial",
+      "date": "2026-05-31"
+    }
+  ]
 }
