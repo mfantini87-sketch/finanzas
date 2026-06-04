@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-04T16:56:07.750Z",
+  "date": "2026-06-04T16:56:32.528Z",
   "transactions": [
+    {
+      "id": "1780592192150",
+      "type": "expense",
+      "amount": 270000,
+      "category": "otro_gasto",
+      "note": "Filtros agua drago",
+      "date": "2026-06-04"
+    },
     {
       "id": "1780592167406",
       "type": "expense",
