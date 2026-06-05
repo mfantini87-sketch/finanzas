@@ -1,38 +1,5 @@
 {
   "version": 1,
-  "date": "2026-06-04T16:56:53.826Z",
-  "transactions": [
-    {
-      "id": "1780592213438",
-      "type": "expense",
-      "amount": 30000,
-      "category": "comida",
-      "note": "Almuerzo pedido corre",
-      "date": "2026-06-04"
-    },
-    {
-      "id": "1780592192150",
-      "type": "expense",
-      "amount": 270000,
-      "category": "otro_gasto",
-      "note": "Filtros agua drago",
-      "date": "2026-06-04"
-    },
-    {
-      "id": "1780592167406",
-      "type": "expense",
-      "amount": 50000,
-      "category": "automotor",
-      "note": "Cochera Corolla",
-      "date": "2026-06-03"
-    },
-    {
-      "id": "1780592143809",
-      "type": "income",
-      "amount": 1154000,
-      "category": "otro_ingreso",
-      "note": "Saldo inicial",
-      "date": "2026-05-31"
-    }
-  ]
+  "date": "2026-06-05T11:39:38.008Z",
+  "transactions": []
 }
