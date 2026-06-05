@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-05T13:17:22.280Z",
+  "date": "2026-06-05T13:17:51.847Z",
   "transactions": [
+    {
+      "id": "1780665471413",
+      "type": "expense",
+      "amount": 50000,
+      "category": "automotor",
+      "note": "Cochera corolla",
+      "date": "2026-06-03"
+    },
     {
       "id": "1780665441408",
       "type": "expense",
