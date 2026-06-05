@@ -1,22 +1,5 @@
 {
   "version": 1,
-  "date": "2026-06-05T11:43:24.006Z",
-  "transactions": [
-    {
-      "id": "1780659803363",
-      "type": "expense",
-      "amount": 50000,
-      "category": "automotor",
-      "note": "Cochera Corolla",
-      "date": "2026-06-03"
-    },
-    {
-      "id": "1780659775378",
-      "type": "income",
-      "amount": 1154000,
-      "category": "otro_ingreso",
-      "note": "Saldo inicial",
-      "date": "2026-05-31"
-    }
-  ]
+  "date": "2026-06-05T12:03:03.281Z",
+  "transactions": []
 }
