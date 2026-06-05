@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-05T13:15:58.968Z",
+  "date": "2026-06-05T13:17:22.280Z",
   "transactions": [
+    {
+      "id": "1780665441408",
+      "type": "expense",
+      "amount": 270000,
+      "category": "otro_gasto",
+      "note": "Cartuchos filtro agua",
+      "date": "2026-06-04"
+    },
     {
       "id": "1780665358154",
       "type": "income",
