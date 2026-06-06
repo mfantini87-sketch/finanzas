@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-05T13:18:17.786Z",
+  "date": "2026-06-06T12:51:50.916Z",
   "transactions": [
+    {
+      "id": "1780750310317",
+      "type": "expense",
+      "amount": 9100,
+      "category": "comida",
+      "note": "Pachos del sergio",
+      "date": "2026-06-05"
+    },
     {
       "id": "1780665497411",
       "type": "expense",
