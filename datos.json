@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-07T22:42:13.927Z",
+  "date": "2026-06-07T22:42:31.618Z",
   "transactions": [
+    {
+      "id": "1780872151355",
+      "type": "expense",
+      "amount": 11000,
+      "category": "comida",
+      "note": "Tortillas plaza",
+      "date": "2026-06-07"
+    },
     {
       "id": "1780872133521",
       "type": "expense",
