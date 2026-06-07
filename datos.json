@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-07T22:41:43.229Z",
+  "date": "2026-06-07T22:42:13.927Z",
   "transactions": [
+    {
+      "id": "1780872133521",
+      "type": "expense",
+      "amount": 3000,
+      "category": "comida",
+      "note": "Bebida fut",
+      "date": "2026-06-06"
+    },
     {
       "id": "1780872102583",
       "type": "expense",
