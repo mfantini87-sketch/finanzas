@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-07T22:42:31.618Z",
+  "date": "2026-06-10T00:53:08.481Z",
   "transactions": [
+    {
+      "id": "1781052787476",
+      "type": "expense",
+      "amount": 10000,
+      "category": "entretenimiento",
+      "note": "Futbol+pelota",
+      "date": "2026-06-08"
+    },
     {
       "id": "1780872151355",
       "type": "expense",
