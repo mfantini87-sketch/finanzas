@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-12T23:49:36.429Z",
+  "date": "2026-06-12T23:49:48.308Z",
   "transactions": [
+    {
+      "id": "1781308187943",
+      "type": "expense",
+      "amount": 25000,
+      "category": "comida",
+      "note": "Compra a tía kika",
+      "date": "2026-06-12"
+    },
     {
       "id": "1781308175245",
       "type": "income",
