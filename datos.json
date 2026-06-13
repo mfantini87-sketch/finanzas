@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "date": "2026-06-13T03:08:36.199Z",
+  "date": "2026-06-13T03:08:42.792Z",
   "transactions": [
     {
       "id": "1781320115657",
@@ -22,7 +22,7 @@
       "id": "1781308175245",
       "type": "income",
       "amount": 50000,
-      "category": "otro_ingreso",
+      "category": "prestamo_cobrado",
       "note": "Devol préstamo Mariela",
       "date": "2026-06-12"
     },
