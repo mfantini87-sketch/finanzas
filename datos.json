@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-13T03:11:22.746Z",
+  "date": "2026-06-16T03:17:49.251Z",
   "transactions": [
+    {
+      "id": "1781579868511",
+      "type": "expense",
+      "amount": 46000,
+      "category": "comida",
+      "note": "Pizzas salvajaz",
+      "date": "2026-06-14"
+    },
     {
       "id": "1781320282119",
       "type": "expense",
