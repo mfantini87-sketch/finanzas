@@ -406,6 +406,7 @@ function getToken() {
 async function syncToGitHub(txs) {
   const token = getToken();
   if (!token) return;
+  if (!txs || txs.length === 0) return; // Never overwrite with empty data
   try {
     const headers = {
       'Authorization': `token ${token}`,
