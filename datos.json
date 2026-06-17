@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-16T03:18:20.275Z",
+  "date": "2026-06-17T21:37:06.152Z",
   "transactions": [
+    {
+      "id": "1781732225211",
+      "type": "expense",
+      "amount": 16000,
+      "category": "ropa",
+      "note": "Medias",
+      "date": "2026-06-16"
+    },
     {
       "id": "1781579899871",
       "type": "expense",
