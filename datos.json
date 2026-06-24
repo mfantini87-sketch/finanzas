@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-24T12:47:57.416Z",
+  "date": "2026-06-24T12:48:09.792Z",
   "transactions": [
+    {
+      "id": "1782305289451",
+      "type": "expense",
+      "amount": 1000,
+      "category": "otro_gasto",
+      "note": "Propina",
+      "date": "2026-06-24"
+    },
     {
       "id": "1782305276574",
       "type": "expense",
