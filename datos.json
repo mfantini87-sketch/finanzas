@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-24T12:48:09.792Z",
+  "date": "2026-06-25T15:34:22.459Z",
   "transactions": [
+    {
+      "id": "1782401661627",
+      "type": "expense",
+      "amount": 8000,
+      "category": "automotor",
+      "note": "Lamparitas etios",
+      "date": "2026-06-23"
+    },
     {
       "id": "1782305289451",
       "type": "expense",
