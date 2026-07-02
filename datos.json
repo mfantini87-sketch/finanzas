@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-06-26T12:43:08.901Z",
+  "date": "2026-07-02T08:38:43.148Z",
   "transactions": [
+    {
+      "id": "1782981522454",
+      "type": "expense",
+      "amount": 16000,
+      "category": "otro_gasto",
+      "note": "Futbol + Pablo",
+      "date": "2026-06-29"
+    },
     {
       "id": "1782477787931",
       "type": "income",
