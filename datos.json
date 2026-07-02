@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-07-02T08:39:35.567Z",
+  "date": "2026-07-02T08:39:55.835Z",
   "transactions": [
+    {
+      "id": "1782981595419",
+      "type": "expense",
+      "amount": 110000,
+      "category": "comida",
+      "note": "Cena con Pablo parrilla",
+      "date": "2026-07-01"
+    },
     {
       "id": "1782981575140",
       "type": "expense",
