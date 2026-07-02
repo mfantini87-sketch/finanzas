@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-07-02T08:39:22.060Z",
+  "date": "2026-07-02T08:39:35.567Z",
   "transactions": [
+    {
+      "id": "1782981575140",
+      "type": "expense",
+      "amount": 4000,
+      "category": "comida",
+      "note": "Cremona",
+      "date": "2026-07-01"
+    },
     {
       "id": "1782981561511",
       "type": "expense",
