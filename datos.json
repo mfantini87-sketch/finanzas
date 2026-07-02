@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "date": "2026-07-02T08:38:43.148Z",
+  "date": "2026-07-02T08:39:22.060Z",
   "transactions": [
+    {
+      "id": "1782981561511",
+      "type": "expense",
+      "amount": 7000,
+      "category": "automotor",
+      "note": "Estacionamiento Facu",
+      "date": "2026-07-01"
+    },
     {
       "id": "1782981522454",
       "type": "expense",
